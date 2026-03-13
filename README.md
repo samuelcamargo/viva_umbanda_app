@@ -1,24 +1,47 @@
 # Viva Umbanda
 
-App de **frases e pensamentos umbandistas** que exibe uma frase aleatória ao abrir, informações sobre Orixás e opção de remover publicidade por assinatura. Funciona **offline**, sem login e sem backend: tudo fica no celular em um banco SQLite.
+Aplicativo Flutter de **frases e pensamentos umbandistas**, com conteúdo sobre a **Umbanda no Brasil**, lista de **Orixás** e um fluxo simples de **assinatura para remover publicidade**. O app funciona **offline**, sem login e sem backend.
+
+Hoje o projeto roda em:
+
+- Android
+- Windows
+- Web (`Chrome` e `Edge`)
 
 ---
 
-## O que o app faz
+## Funcionalidades
 
-- **Home**: mostra uma frase umbandista por dia (não assinante) ou várias ao toque em "Nova frase" (assinante). Dois espaços para banners (em cima e embaixo). Quem não assina vê apenas um pensamento por dia.
-- **Umbanda**: página com um pouco da história da Umbanda no Brasil (origem em 1908, Zélio de Moraes, Caboclo das Sete Encruzilhadas, primeiro templo). Dois espaços para anúncios (ocultos para assinante).
-- **Orixás**: lista de Orixás da Umbanda com nome e descrição, também com dois espaços para anúncios.
-- **Remover publicidade**: assinatura de **US$ 1,00/mês** (ou equivalente) para remover anúncios e desbloquear mais pensamentos por dia na Home. Por enquanto não há integração com a loja; há um switch "Simular assinante" para testar.
+- **Home**: exibe um pensamento umbandista.
+  - Não assinante: **1 pensamento por dia**
+  - Assinante: pode tocar em **"Nova frase"** para carregar quantas quiser
+  - Banners no topo e no rodapé para não assinantes
+- **Umbanda**: tela com um resumo da história da Umbanda no Brasil
+- **Orixás**: lista com nome, descrição e cor temática de cada Orixá
+- **Remover publicidade**: tela da assinatura por **US$ 1,00/mês** (ou equivalente), com switch de **"Simular assinante"** para testes
+
+---
+
+## Stack atual
+
+- **Flutter**
+- **Isar** como banco local em Android/Windows
+- **SharedPreferences** para guardar:
+  - status de assinatura
+  - frase do dia
+- **google_mobile_ads**
+  - por enquanto o app usa placeholders visuais
+  - no Android há um **App ID de teste do AdMob** no manifest para evitar crash na inicialização
 
 ---
 
 ## Pré-requisitos
 
-- [Flutter](https://flutter.dev) instalado (versão mínima sugerida: 3.16+).
-- Android Studio e/ou Xcode para rodar em emulador ou dispositivo (Android e iOS).
+- Flutter instalado
+- Android Studio para emulador Android
+- Chrome ou Edge para web
 
-Para verificar:
+Comando útil:
 
 ```bash
 flutter doctor
@@ -28,87 +51,232 @@ flutter doctor
 
 ## Como rodar
 
-1. Clone o repositório (ou baixe o código).
-2. Abra o terminal na pasta do projeto (onde está o `pubspec.yaml`).
-3. Instale as dependências e execute:
+Na raiz do projeto:
 
 ```bash
 flutter pub get
-flutter run
 ```
 
-Escolha um dispositivo/emulador quando o Flutter pedir. Para Android:
+### Android
+
+1. Abra um emulador no Android Studio
+2. Confirme os dispositivos:
+
+```bash
+flutter devices
+```
+
+3. Rode o app:
 
 ```bash
 flutter run -d android
 ```
 
-Para iOS (apenas em Mac):
+Se quiser um device específico:
 
 ```bash
-flutter run -d ios
+flutter run -d emulator-5554
 ```
 
-**Web (Chrome):** use o renderer HTML para evitar erro de "MaterialApp undefined" em debug:
+### Windows
+
+```bash
+flutter run -d windows
+```
+
+### Web
+
+Para Chrome:
 
 ```bash
 flutter run -d chrome --web-renderer html
 ```
 
----
+Para Edge:
 
-## Estrutura do projeto (para quem for dar manutenção)
-
-A lógica do app está em `lib/`:
-
-| Pasta / arquivo | Função |
-|-----------------|--------|
-| `main.dart` | Entrada do app: tema e navegação com 4 abas (Home, Umbanda, Orixás, Remover anúncios). |
-| `main_navigator.dart` | Container das abas e do IndexedStack; compartilha adsRemovedNotifier. |
-| `app.dart` | Definição do tema (cores, fontes) do app. |
-| `database/database_helper.dart` | Abre/cria o banco SQLite e oferece `getFraseAleatoria()` e `getAllOrixas()`. |
-| `database/seed_data.dart` | Dados iniciais: frases e Orixás inseridos na primeira abertura do app. |
-| `database/frases_data.dart` | Listas de frases umbandistas (caridade, fé/axé, Orixás, etc.) usadas pelo seed. |
-| `models/frase.dart` | Modelo da frase (id, texto, autor). |
-| `models/orixa.dart` | Modelo do Orixá (id, nome, descricao, cor). |
-| `screens/home_screen.dart` | Tela Home: uma frase por dia (não assinante) ou várias (assinante) + placeholders. |
-| `screens/umbanda_screen.dart` | Tela Umbanda: história da Umbanda no Brasil + placeholders. |
-| `screens/orixas_screen.dart` | Tela Orixás: lista de Orixás + dois placeholders. |
-| `screens/remove_ads_screen.dart` | Tela "Remover publicidade" (US$ 1/mês) e switch "Simular assinante". |
-| `widgets/banner_placeholder.dart` | Widget reutilizável dos espaços de anúncio (topo e baixo). |
-| `services/preferences_service.dart` | Assinante (sem anúncios) e frase do dia para não assinantes. |
-
-O código está comentado para um desenvolvedor júnior conseguir entender onde alterar frases, temas e anúncios.
+```bash
+flutter run -d edge
+```
 
 ---
 
-## Banco de dados (SQLite)
+## Estrutura do projeto
 
-- O banco fica no armazenamento interno do app (diretório de documentos), com o nome `viva_umbanda.db`.
-- **Tabelas**:
-  - `frases`: `id`, `texto`, `autor` (opcional).
-  - `orixas`: `id`, `nome`, `descricao`, `cor` (opcional, para a UI).
-- Os dados iniciais são inseridos na primeira execução em `database/seed_data.dart`.
-- **Como adicionar novas frases ou Orixás**: edite as listas em `lib/database/seed_data.dart` e reinstale o app (ou incremente a versão do banco e faça uma migração para rodar novos inserts).
+### `lib/`
+
+| Caminho | Responsabilidade |
+|---|---|
+| `main.dart` | Ponto de entrada do app |
+| `app_root.dart` | Constrói o `MaterialApp` raiz |
+| `app.dart` | Tema, cores e estilos globais |
+| `main_navigator.dart` | Navegação por abas (`Home`, `Umbanda`, `Orixás`, `Remover anúncios`) |
+| `screens/home_screen.dart` | Frase do dia / nova frase para assinantes |
+| `screens/umbanda_screen.dart` | História da Umbanda no Brasil |
+| `screens/orixas_screen.dart` | Lista de Orixás |
+| `screens/remove_ads_screen.dart` | Tela da assinatura e simulação de assinante |
+| `services/preferences_service.dart` | Persistência de assinatura e frase do dia |
+| `widgets/banner_placeholder.dart` | Placeholder visual para banners |
+
+### `lib/database/`
+
+| Caminho | Responsabilidade |
+|---|---|
+| `database_helper.dart` | Export condicional por plataforma |
+| `database_helper_native.dart` | Implementação nativa com Isar |
+| `database_helper_web.dart` | Implementação web em memória |
+| `isar_schema.dart` | Schema Isar (`FraseIsar`, `OrixaIsar`) |
+| `isar_schema.g.dart` | Código gerado do Isar |
+| `frases_data.dart` | Base de frases umbandistas |
+| `seed_data.dart` | Base dos Orixás e helpers para web/seed |
+
+### `models/`
+
+- `frase.dart`
+- `orixa.dart`
 
 ---
 
-## Onde colocar os anúncios de verdade
+## Banco de dados
 
-Os dois espaços (em cima e embaixo) usam o widget `BannerPlaceholder` em `lib/widgets/banner_placeholder.dart`. Para exibir anúncios reais:
+### Android e Windows
 
-1. Configure o [Google AdMob](https://admob.google.com) e crie os IDs dos seus banners.
-2. No projeto, o pacote `google_mobile_ads` já está no `pubspec.yaml`.
-3. Troque o uso de `BannerPlaceholder` pelos widgets de banner do `google_mobile_ads` (por exemplo `AdWidget` com `BannerAd`), usando seus IDs. A documentação do pacote está em: [google_mobile_ads no pub.dev](https://pub.dev/packages/google_mobile_ads).
+O app usa **[Isar](https://pub.dev/packages/isar)** como banco local.
 
-A lógica de “mostrar ou não” os banners já está pronta: quando o usuário é assinante (ou “Simular assinante” está ativo), os placeholders não são exibidos.
+Coleções:
+
+- `FraseIsar`
+- `OrixaIsar`
+
+Comportamento do seed:
+
+- o banco é aberto uma única vez por execução
+- o seed compara a contagem esperada com a contagem atual
+- se houver divergência, ele:
+  - limpa frases
+  - limpa Orixás
+  - repopula tudo novamente
+
+Isso evita:
+
+- seed duplicado
+- Orixás repetidos
+- base parcial depois de testes
+
+### Web
+
+Na web o app **não usa Isar**. Ele carrega frases e Orixás em memória via `SeedData`, para evitar problemas do código gerado do Isar no JavaScript.
 
 ---
 
-## Próximos passos (assinatura)
+## Frases
 
-- Integrar **in_app_purchase** (ou equivalente) para a assinatura de **US$ 1,00/mês** (ou equivalente).
-- Após a compra ser validada pela loja, salvar em `PreferencesService` que a publicidade foi removida (`setRemoverPublicidadeAtivo(true)`), para que o app continue escondendo os banners e liberando mais frases por dia sem precisar de login.
+- As frases vêm de `lib/database/frases_data.dart`
+- Hoje o app está configurado para usar a lista completa quando `so10ParaTeste = false`
+- Se esse valor for mudado para `true`, o app limita o retorno a 10 frases para testes
+
+Para alterar o conteúdo:
+
+- edite `frases_data.dart`
+- desinstale o app ou limpe os dados
+- rode novamente para repovoar o banco
+
+---
+
+## Orixás
+
+Os Orixás são definidos em `lib/database/seed_data.dart`.
+
+Para alterar:
+
+- nome
+- descrição
+- cor
+
+edite a lista `_orixasData` e reinstale o app ou limpe os dados.
+
+---
+
+## Assinatura e anúncios
+
+### Estado atual
+
+- a assinatura é apresentada como **US$ 1,00/mês**
+- ainda não existe integração real com loja (`Play Store` / `App Store`)
+- existe um switch **"Simular assinante"** para testes
+
+### Regras no app
+
+- assinante:
+  - remove banners
+  - pode ver mais pensamentos por dia
+- não assinante:
+  - vê um pensamento por dia
+  - continua vendo placeholders de anúncios
+
+### AdMob
+
+O projeto usa `google_mobile_ads`, mas ainda não renderiza banners reais.
+
+No Android, o `AndroidManifest.xml` contém um **App ID de teste do AdMob** apenas para evitar que o app feche ao iniciar em debug.
+
+Quando for publicar, troque esse valor por um App ID real do projeto AdMob.
+
+---
+
+## Android: observações importantes
+
+O projeto recebeu alguns ajustes para funcionar com o ambiente atual:
+
+- **Gradle 8.7**
+- **Android Gradle Plugin 8.3.2**
+- **Kotlin 1.9.22**
+- `kotlin.incremental=false` para evitar erro de caminhos em discos diferentes (`C:` e `D:`)
+- workaround no `android/build.gradle` para definir `namespace` em dependências Android antigas, como `isar_flutter_libs`
+
+Se o `flutter run` perder a conexão com o debug service no emulador, estes comandos costumam resolver:
+
+```bash
+adb forward --remove-all
+adb kill-server
+adb start-server
+flutter run -d emulator-5554
+```
+
+---
+
+## Arquivos gerados
+
+Ao mudar o schema do Isar, gere novamente o arquivo `.g.dart`:
+
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+
+---
+
+## Testes e análise
+
+Analisar o projeto:
+
+```bash
+flutter analyze
+```
+
+Teste widget básico:
+
+```bash
+flutter test
+```
+
+---
+
+## Próximos passos recomendados
+
+- integrar compra real da assinatura
+- trocar o App ID de teste do AdMob por um real
+- implementar banners reais com `BannerAd` / `AdWidget`
+- revisar o conjunto de frases e autores
+- ajustar identidade visual final do app
 
 ---
 

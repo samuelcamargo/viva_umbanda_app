@@ -13,6 +13,27 @@ subprojects {
     project.evaluationDependsOn(":app")
 }
 
+// AGP 8 exige namespace em todos os módulos. isar_flutter_libs (Isar 3.1) não define;
+// definimos a partir do package do AndroidManifest quando faltar.
+subprojects { subproject ->
+    if (!subproject.state.executed) {
+        subproject.afterEvaluate {
+            if (subproject.plugins.hasPlugin("com.android.library")) {
+                def namespace = subproject.android.namespace
+                if (namespace == null || namespace.isEmpty()) {
+                    def manifest = subproject.file("src/main/AndroidManifest.xml")
+                    if (manifest.exists()) {
+                        def pkg = new XmlParser().parse(manifest).attribute("package")
+                        if (pkg != null && !pkg.isEmpty()) {
+                            subproject.android.namespace = pkg
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }

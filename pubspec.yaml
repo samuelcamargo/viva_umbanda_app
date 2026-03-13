@@ -31,9 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  # SQLite local (sem backend)
-  sqflite: ^2.3.2
-  path: ^1.9.0
+  # Isar: banco NoSQL leve e rápido (substitui SQLite) - pacote oficial 3.1.x compatível com Dart 3.5
+  isar: ^3.1.0
+  isar_flutter_libs: ^3.1.0
   path_provider: ^2.1.2
   # Preferências do usuário (ex.: assinante remove anúncios)
   shared_preferences: ^2.2.2
@@ -50,6 +50,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  build_runner: ^2.4.8
+  isar_generator: ^3.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

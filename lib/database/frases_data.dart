@@ -4,7 +4,7 @@
 // Usado por seed_data.dart para popular o banco e para a web.
 // Fonte: pesquisas em mensagens e sites de Umbanda + variações temáticas.
 
-/// Retorna todas as frases umbandistas (banco + web). Mais de 2 mil frases.
+/// Retorna todas as frases umbandistas (banco + web).
 List<String> getFrasesUmbandistas() {
   return [
     ..._frasesCaridade,

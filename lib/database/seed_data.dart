@@ -1,20 +1,12 @@
 // database/seed_data.dart
 //
-// Dados iniciais do banco: frases umbandistas e informações dos Orixás.
-// Chamado apenas uma vez pelo DatabaseHelper no onCreate.
-// As frases vêm de frases_data.dart (mais de 2 mil). Para alterar, edite lá.
+// Dados dos Orixás e helpers para web (dados em memória).
+// O seed do Isar é feito em DatabaseHelper; as frases vêm de frases_data.dart.
 
-import 'package:sqflite/sqflite.dart';
 import 'frases_data.dart';
 
 class SeedData {
-  /// Insere frases e Orixás só se as tabelas estiverem vazias (evita duplicar)
-  static Future<void> insertInitialData(Database db) async {
-    await _insertFrases(db);
-    await _insertOrixas(db);
-  }
-
-  /// Usado na web, onde SQLite não está disponível. Mesmo conteúdo das frases do banco.
+  /// Usado na web (dados em memória). Mesmo conteúdo das frases do banco.
   static List<Map<String, dynamic>> getFrasesForWeb() {
     final frases = getFrasesUmbandistas();
     return frases
@@ -26,7 +18,7 @@ class SeedData {
 
   /// Usado na web. Mesmo conteúdo dos Orixás do banco (id, nome, descricao, cor).
   static List<Map<String, dynamic>> getOrixasForWeb() {
-    return _orixasData
+    return getOrixasDataForSeed()
         .asMap()
         .entries
         .map((e) => {
@@ -37,6 +29,9 @@ class SeedData {
             })
         .toList();
   }
+
+  /// Lista de Orixás para seed do Isar (DatabaseHelper) e para getOrixasForWeb.
+  static List<Map<String, String>> getOrixasDataForSeed() => _orixasData;
 
   static const List<Map<String, String>> _orixasData = [
     {
@@ -100,31 +95,4 @@ class SeedData {
       'cor': '0xFF212121',
     },
   ];
-
-  static Future<void> _insertFrases(Database db) async {
-    final frases = getFrasesUmbandistas();
-    for (var i = 0; i < frases.length; i++) {
-      await db.insert(
-        'frases',
-        {'id': i + 1, 'texto': frases[i], 'autor': null},
-        conflictAlgorithm: ConflictAlgorithm.ignore,
-      );
-    }
-  }
-
-  static Future<void> _insertOrixas(Database db) async {
-    for (var i = 0; i < _orixasData.length; i++) {
-      final o = _orixasData[i];
-      await db.insert(
-        'orixas',
-        {
-          'id': i + 1,
-          'nome': o['nome'],
-          'descricao': o['descricao'],
-          'cor': o['cor'],
-        },
-        conflictAlgorithm: ConflictAlgorithm.ignore,
-      );
-    }
-  }
 }

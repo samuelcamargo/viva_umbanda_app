@@ -24,7 +24,6 @@ ThemeData getAppTheme() {
       primary: AppColors.primary,
       secondary: AppColors.accent,
       surface: AppColors.surface,
-      background: AppColors.background,
       brightness: Brightness.light,
     ),
     scaffoldBackgroundColor: AppColors.background,

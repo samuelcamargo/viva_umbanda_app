@@ -68,7 +68,7 @@ class _RemoveAdsScreenState extends State<RemoveAdsScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 16),
-            Icon(
+            const Icon(
               Icons.block_outlined,
               size: 64,
               color: AppColors.primary,
