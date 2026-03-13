@@ -8,7 +8,7 @@
 List<String> getFrasesUmbandistas() {
   return [
     ..._frasesCaridade,
-    ..._frasesFeAxé,
+    ..._frasesFeAxe,
     ..._frasesOrixas,
     ..._frasesTerreiroGira,
     ..._frasesPretosVelhos,
@@ -76,7 +76,7 @@ const List<String> _frasesCaridade = [
 ];
 
 // --- FÉ, AXÉ, LEVANTAR ---
-const List<String> _frasesFeAxé = [
+const List<String> _frasesFeAxe = [
   'O axé está em cada gesto de bondade.',
   'Quem tem fé não tem medo.',
   'Axé! Vive com fé aquele que sempre se ergue após cair.',

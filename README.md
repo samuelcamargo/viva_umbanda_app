@@ -6,9 +6,10 @@ App de **frases e pensamentos umbandistas** que exibe uma frase aleatória ao ab
 
 ## O que o app faz
 
-- **Home**: ao abrir o app (ou a aba Home), mostra uma frase umbandista aleatória vinda do banco. Dois espaços para banners de propaganda (em cima e embaixo). Botão "Nova frase" para sortear outra.
+- **Home**: mostra uma frase umbandista por dia (não assinante) ou várias ao toque em "Nova frase" (assinante). Dois espaços para banners (em cima e embaixo). Quem não assina vê apenas um pensamento por dia.
+- **Umbanda**: página com um pouco da história da Umbanda no Brasil (origem em 1908, Zélio de Moraes, Caboclo das Sete Encruzilhadas, primeiro templo). Dois espaços para anúncios (ocultos para assinante).
 - **Orixás**: lista de Orixás da Umbanda com nome e descrição, também com dois espaços para anúncios.
-- **Remover publicidade**: tela que explica a assinatura de R$ 9,90/mês para tirar os anúncios. Por enquanto não há integração com a loja; há um switch "Simular assinante" para testar o app sem banners.
+- **Remover publicidade**: assinatura de **US$ 1,00/mês** (ou equivalente) para remover anúncios e desbloquear mais pensamentos por dia na Home. Por enquanto não há integração com a loja; há um switch "Simular assinante" para testar.
 
 ---
 
@@ -62,17 +63,20 @@ A lógica do app está em `lib/`:
 
 | Pasta / arquivo | Função |
 |-----------------|--------|
-| `main.dart` | Entrada do app: tema e navegação com 3 abas (Home, Orixás, Remover anúncios). |
+| `main.dart` | Entrada do app: tema e navegação com 4 abas (Home, Umbanda, Orixás, Remover anúncios). |
+| `main_navigator.dart` | Container das abas e do IndexedStack; compartilha adsRemovedNotifier. |
 | `app.dart` | Definição do tema (cores, fontes) do app. |
 | `database/database_helper.dart` | Abre/cria o banco SQLite e oferece `getFraseAleatoria()` e `getAllOrixas()`. |
 | `database/seed_data.dart` | Dados iniciais: frases e Orixás inseridos na primeira abertura do app. |
+| `database/frases_data.dart` | Listas de frases umbandistas (caridade, fé/axé, Orixás, etc.) usadas pelo seed. |
 | `models/frase.dart` | Modelo da frase (id, texto, autor). |
 | `models/orixa.dart` | Modelo do Orixá (id, nome, descricao, cor). |
-| `screens/home_screen.dart` | Tela Home: frase + dois placeholders de anúncio. |
+| `screens/home_screen.dart` | Tela Home: uma frase por dia (não assinante) ou várias (assinante) + placeholders. |
+| `screens/umbanda_screen.dart` | Tela Umbanda: história da Umbanda no Brasil + placeholders. |
 | `screens/orixas_screen.dart` | Tela Orixás: lista de Orixás + dois placeholders. |
-| `screens/remove_ads_screen.dart` | Tela "Remover publicidade" e switch "Simular assinante". |
+| `screens/remove_ads_screen.dart` | Tela "Remover publicidade" (US$ 1/mês) e switch "Simular assinante". |
 | `widgets/banner_placeholder.dart` | Widget reutilizável dos espaços de anúncio (topo e baixo). |
-| `services/preferences_service.dart` | Guarda se o usuário “removeu a publicidade” (assinante). |
+| `services/preferences_service.dart` | Assinante (sem anúncios) e frase do dia para não assinantes. |
 
 O código está comentado para um desenvolvedor júnior conseguir entender onde alterar frases, temas e anúncios.
 
@@ -103,8 +107,8 @@ A lógica de “mostrar ou não” os banners já está pronta: quando o usuári
 
 ## Próximos passos (assinatura)
 
-- Integrar **in_app_purchase** (ou equivalente) para a assinatura de R$ 9,90/mês.
-- Após a compra ser validada pela loja, salvar em `PreferencesService` que a publicidade foi removida (por exemplo `setRemoverPublicidadeAtivo(true)`), para que o app continue escondendo os banners sem precisar de login.
+- Integrar **in_app_purchase** (ou equivalente) para a assinatura de **US$ 1,00/mês** (ou equivalente).
+- Após a compra ser validada pela loja, salvar em `PreferencesService` que a publicidade foi removida (`setRemoverPublicidadeAtivo(true)`), para que o app continue escondendo os banners e liberando mais frases por dia sem precisar de login.
 
 ---
 

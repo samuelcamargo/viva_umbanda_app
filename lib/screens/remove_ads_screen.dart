@@ -1,9 +1,8 @@
 // screens/remove_ads_screen.dart
 //
-// Terceira aba: página estática explicando que por R$ 9,90/mês o usuário
-// remove os anúncios da Home e da aba Orixás. Botão "Assinar" sem integração
-// com store (pode mostrar SnackBar "Em breve"). Opcional: switch "Simular assinante"
-// para testar esconder os banners.
+// Aba "Remover anúncios": assinatura por US$ 1,00/mês (ou equivalente).
+// Benefícios: sem anúncios (Home, Umbanda, Orixás) e mais pensamentos por dia na Home.
+// Botão "Assinar" sem integração com store; switch "Simular assinante" para testes.
 
 import 'package:flutter/material.dart';
 import '../services/preferences_service.dart';
@@ -85,8 +84,10 @@ class _RemoveAdsScreenState extends State<RemoveAdsScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Por apenas R\$ 9,90 por mês você remove todos os anúncios da Home e da seção Orixás. '
-              'O app continua igual: frases aleatórias e informações sobre os Orixás, só que sem propaganda.',
+              'Por apenas US\$ 1,00 por mês (ou equivalente na sua moeda) você:\n\n'
+              '• Remove todos os anúncios da Home, Umbanda e Orixás\n'
+              '• Pode ver mais pensamentos por dia na Home (sem limite)\n\n'
+              'Quem não assina vê um pensamento por dia; assinando, você acessa quantas frases quiser.',
               style: Theme.of(context).textTheme.bodyLarge,
               textAlign: TextAlign.center,
             ),
@@ -97,7 +98,7 @@ class _RemoveAdsScreenState extends State<RemoveAdsScreen> {
                 backgroundColor: AppColors.primary,
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
-              child: const Text('Assinar por R\$ 9,90/mês'),
+              child: const Text('Assinar por US\$ 1,00/mês'),
             ),
             const SizedBox(height: 32),
             const Divider(),

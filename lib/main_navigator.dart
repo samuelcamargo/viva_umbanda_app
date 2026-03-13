@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
+import 'screens/umbanda_screen.dart';
 import 'screens/orixas_screen.dart';
 import 'screens/remove_ads_screen.dart';
 import 'services/preferences_service.dart';
@@ -27,6 +28,7 @@ class _MainNavigatorState extends State<MainNavigator> {
     super.initState();
     _telas = [
       HomeScreen(adsRemovedNotifier: adsRemovedNotifier),
+      UmbandaScreen(adsRemovedNotifier: adsRemovedNotifier),
       OrixasScreen(adsRemovedNotifier: adsRemovedNotifier),
       RemoveAdsScreen(adsRemovedNotifier: adsRemovedNotifier),
     ];
@@ -61,6 +63,10 @@ class _MainNavigatorState extends State<MainNavigator> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home_rounded),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu_book_rounded),
+            label: 'Umbanda',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.auto_awesome),
